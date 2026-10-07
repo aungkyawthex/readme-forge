@@ -205,8 +205,34 @@ export const sections: Section[] = [
   extras,
 ];
 
-export function generateMarkdown(profile: Profile): string {
-  return sections
+export const defaultSectionOrder = sections.map((s) => s.id);
+
+export type MarkdownOptions = {
+  sectionOrder?: string[];
+  disabledSections?: string[];
+};
+
+export function generateMarkdown(
+  profile: Profile,
+  { sectionOrder = defaultSectionOrder, disabledSections = [] }: MarkdownOptions = {}
+): string {
+  const byId = new Map(sections.map((s) => [s.id, s]));
+  const disabled = new Set(disabledSections);
+  const seen = new Set<string>();
+  const ordered: Section[] = [];
+
+  for (const id of sectionOrder) {
+    const section = byId.get(id);
+    if (!section || seen.has(id)) continue;
+    seen.add(id);
+    if (!disabled.has(id)) ordered.push(section);
+  }
+
+  for (const section of sections) {
+    if (!seen.has(section.id) && !disabled.has(section.id)) ordered.push(section);
+  }
+
+  return ordered
     .map((s) => s.render(profile))
     .filter(Boolean)
     .join("\n\n");

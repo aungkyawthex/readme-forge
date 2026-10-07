@@ -1,14 +1,23 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { emptyProfile, type Profile } from "../types/profile";
+import { defaultSectionOrder } from "../sections";
 
 type ProfileState = {
   profile: Profile;
+  disabledSections: string[];
+  sectionOrder: string[];
   updateSection: <K extends keyof Profile>(key: K, value: Profile[K]) => void;
+  toggleSection: (id: string) => void;
+  setSectionOrder: (sectionOrder: string[]) => void;
   reset: () => void;
 };
 
-type PersistedSlice = { profile?: Partial<Profile> };
+type PersistedSlice = {
+  profile?: Partial<Profile>;
+  disabledSections?: string[];
+  sectionOrder?: string[];
+};
 
 function withIds<T extends { id: string }>(
   items: T[] | undefined,
@@ -54,21 +63,47 @@ function mergeProfile(saved?: Partial<Profile>): Profile {
   };
 }
 
+function normalizeOrder(saved?: string[]): string[] {
+  const known = new Set(defaultSectionOrder);
+  const kept = (saved ?? defaultSectionOrder).filter((id) => known.has(id));
+  const missing = defaultSectionOrder.filter((id) => !kept.includes(id));
+  return [...kept, ...missing];
+}
+
 export const useProfile = create<ProfileState>()(
   persist(
     (set) => ({
       profile: emptyProfile,
+      disabledSections: [],
+      sectionOrder: defaultSectionOrder,
       updateSection: (key, value) =>
         set((state) => ({ profile: { ...state.profile, [key]: value } })),
-      reset: () => set({ profile: emptyProfile }),
+      toggleSection: (id) =>
+        set((state) => ({
+          disabledSections: state.disabledSections.includes(id)
+            ? state.disabledSections.filter((x) => x !== id)
+            : [...state.disabledSections, id],
+        })),
+      setSectionOrder: (sectionOrder) => set({ sectionOrder: normalizeOrder(sectionOrder) }),
+      reset: () =>
+        set({
+          profile: emptyProfile,
+          disabledSections: [],
+          sectionOrder: defaultSectionOrder,
+        }),
     }),
     {
       name: "readme-forge-profile",
       merge: (persisted, current) => {
         const saved = persisted as PersistedSlice | undefined;
+        const known = new Set(defaultSectionOrder);
         return {
           ...current,
           profile: mergeProfile(saved?.profile),
+          sectionOrder: normalizeOrder(saved?.sectionOrder),
+          disabledSections: (saved?.disabledSections ?? []).filter((id) =>
+            known.has(id)
+          ),
         };
       },
     }
