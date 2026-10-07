@@ -141,3 +141,7 @@
   .landing-hero h1 { font-size: clamp(2.8rem, 15vw, 4rem); }
   .blueprint-card { transform: none; box-shadow: .45rem .45rem 0 #c7dddd; }
 }
+
+.landing-nav-actions { display: flex; align-items: center; gap: 1.25rem; }
+.landing-star { display: inline-flex; align-items: center; gap: .45rem; border: 1px solid var(--landing-line); border-radius: .4rem; padding: .5rem .7rem; background: #f8fbfa; color: var(--landing-ink); font-size: .8rem; font-weight: 700; }
+.landing-star:hover { border-color: var(--landing-accent); color: var(--landing-accent); }

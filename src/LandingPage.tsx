@@ -13,7 +13,15 @@ export function LandingPage() {
     <main className="landing-shell min-h-screen px-5 py-6 sm:px-8 lg:px-12">
       <nav className="mx-auto flex max-w-6xl items-center justify-between" aria-label="Main navigation">
         <Link className="landing-brand" to="/">readme-forge</Link>
-        <Link className="landing-text-link" to="/editor">Open editor <span aria-hidden="true">→</span></Link>
+        <div className="landing-nav-actions">
+          <a className="landing-star" href="https://github.com/aungkyawthex/readme-forge" target="_blank" rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+              <path d="M8 .75a.75.75 0 0 1 .673.418l1.91 3.87 4.27.621a.75.75 0 0 1 .416 1.279l-3.09 3.012.73 4.253a.75.75 0 0 1-1.088.79L8 12.984l-3.82 2.009a.75.75 0 0 1-1.088-.79l.73-4.253L.732 6.938a.75.75 0 0 1 .416-1.279l4.27-.62 1.91-3.871A.75.75 0 0 1 8 .75Z" />
+            </svg>
+            Star on GitHub
+          </a>
+          <Link className="landing-text-link" to="/editor">Open editor <span aria-hidden="true">→</span></Link>
+        </div>
       </nav>
 
       <section className="landing-hero mx-auto grid max-w-6xl items-center gap-12 py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-24">
