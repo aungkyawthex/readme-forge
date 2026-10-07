@@ -37,11 +37,6 @@ export function GitHubStatsForm() {
           updateSection("githubStats", { ...githubStats, showStreak })
         }
       />
-      <p className="text-xs text-gray-500">
-        Cards are images from github-readme-stats. If they stop loading, change
-        GITHUB_README_STATS_BASE in src/sections/index.ts to a self-hosted
-        instance.
-      </p>
     </div>
   );
 }
