@@ -10,22 +10,47 @@ type ProfileState = {
 
 type PersistedSlice = { profile?: Partial<Profile> };
 
-function mergeProfile(saved?: Partial<Profile>): Profile {
-  const projects = (saved?.projects ?? []).map((p) => ({
-    id: p.id || crypto.randomUUID(),
-    title: p.title ?? "",
-    description: p.description ?? "",
-    repoUrl: p.repoUrl ?? "",
-    liveUrl: p.liveUrl ?? "",
+function withIds<T extends { id: string }>(
+  items: T[] | undefined,
+  fill: (item: T) => T
+): T[] {
+  return (items ?? []).map((item) => ({
+    ...fill(item),
+    id: item.id || crypto.randomUUID(),
   }));
+}
 
+function mergeProfile(saved?: Partial<Profile>): Profile {
   return {
     ...emptyProfile,
     ...saved,
     header: { ...emptyProfile.header, ...saved?.header },
     about: { ...emptyProfile.about, ...saved?.about },
+    socials: { ...emptyProfile.socials, ...saved?.socials },
+    githubStats: { ...emptyProfile.githubStats, ...saved?.githubStats },
+    extras: { ...emptyProfile.extras, ...saved?.extras },
     skills: saved?.skills ?? emptyProfile.skills,
-    projects,
+    interests: saved?.interests ?? emptyProfile.interests,
+    projects: withIds(saved?.projects, (p) => ({
+      id: p.id,
+      title: p.title ?? "",
+      description: p.description ?? "",
+      repoUrl: p.repoUrl ?? "",
+      liveUrl: p.liveUrl ?? "",
+    })),
+    education: withIds(saved?.education, (e) => ({
+      id: e.id,
+      school: e.school ?? "",
+      title: e.title ?? "",
+      year: e.year ?? "",
+    })),
+    experience: withIds(saved?.experience, (e) => ({
+      id: e.id,
+      company: e.company ?? "",
+      role: e.role ?? "",
+      period: e.period ?? "",
+      summary: e.summary ?? "",
+    })),
   };
 }
 
@@ -39,7 +64,6 @@ export const useProfile = create<ProfileState>()(
     }),
     {
       name: "readme-forge-profile",
-      // Old localStorage may lack new fields (e.g. project id). Fill from emptyProfile.
       merge: (persisted, current) => {
         const saved = persisted as PersistedSlice | undefined;
         return {
