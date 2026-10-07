@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const optionalUrl = z.union([z.literal(""), z.url("Enter a valid URL")]);
+const optionalEmail = z.union([z.literal(""), z.email("Enter a valid email address")]);
+
 export const profileSchema = z.object({
   header: z.object({
     name: z.string(),
@@ -16,8 +19,8 @@ export const profileSchema = z.object({
   socials: z.object({
     github: z.string(),
     linkedin: z.string(),
-    email: z.string(),
-    portfolio: z.string(),
+    email: optionalEmail,
+    portfolio: optionalUrl,
     x: z.string(),
   }),
   skills: z.array(z.string()),
@@ -27,8 +30,8 @@ export const profileSchema = z.object({
       id: z.string(),
       title: z.string(),
       description: z.string(),
-      repoUrl: z.string(),
-      liveUrl: z.string(),
+      repoUrl: optionalUrl,
+      liveUrl: optionalUrl,
     })
   ),
   education: z.array(
@@ -57,7 +60,7 @@ export const profileSchema = z.object({
   extras: z.object({
     quote: z.string(),
     showVisitorCounter: z.boolean(),
-    supportUrl: z.string(),
+    supportUrl: optionalUrl,
   }),
 });
 

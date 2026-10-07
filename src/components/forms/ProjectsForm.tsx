@@ -2,6 +2,7 @@ import type { Profile } from "../../types/profile";
 import { useProfile } from "../../store/useProfile";
 import { Field } from "../Field";
 import { RepeatableList } from "../RepeatableList";
+import { fieldError } from "../../lib/validation";
 
 type Project = Profile["projects"][number];
 
@@ -42,12 +43,14 @@ export function ProjectsForm() {
             value={project.repoUrl}
             onChange={(repoUrl) => patch({ repoUrl })}
             placeholder="https://github.com/..."
+            error={fieldError("repoUrl", project.repoUrl)}
           />
           <Field
             label="Live URL"
             value={project.liveUrl}
             onChange={(liveUrl) => patch({ liveUrl })}
             placeholder="https://..."
+            error={fieldError("liveUrl", project.liveUrl)}
           />
         </>
       )}

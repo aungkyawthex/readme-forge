@@ -1,5 +1,6 @@
 import { useProfile } from "../../store/useProfile";
 import { Field } from "../Field";
+import { fieldError } from "../../lib/validation";
 
 export function SocialsForm() {
   const socials = useProfile((s) => s.profile.socials);
@@ -33,12 +34,14 @@ export function SocialsForm() {
         value={socials.email}
         onChange={set("email")}
         placeholder="you@example.com"
+        error={fieldError("email", socials.email)}
       />
       <Field
         label="Portfolio"
         value={socials.portfolio}
         onChange={set("portfolio")}
         placeholder="https://..."
+        error={fieldError("portfolio", socials.portfolio)}
       />
     </div>
   );

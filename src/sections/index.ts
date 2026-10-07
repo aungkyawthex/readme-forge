@@ -1,50 +1,23 @@
 import type { Profile } from "../types/profile";
 
-export type Section = {
-  id: string;
-  label: string;
-  render: (p: Profile) => string;
-};
+export type Section = { id: string; label: string; render: (profile: Profile) => string };
 
-// Point these at a self-hosted instance if the public APIs rate-limit you.
 export const GITHUB_README_STATS_BASE = "https://github-readme-stats.vercel.app";
 export const GITHUB_STREAK_STATS_BASE = "https://streak-stats.demolab.com";
 
-const header: Section = {
-  id: "header",
-  label: "Header",
-  render: ({ header: h }) => {
-    if (!h.name) return "";
-    return [
-      `# Hi 👋, I'm ${h.name}`,
-      h.role || h.company
-        ? `### ${[h.role, h.company && `@ ${h.company}`].filter(Boolean).join(" ")}`
-        : "",
-      h.tagline ? `> ${h.tagline}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n\n");
-  },
-};
+function markdownText(value: string): string {
+  return value.trim().replace(/[\\`*_\[\]<>#]/g, "\\$&").replace(/\r?\n/g, " ");
+}
 
-const about: Section = {
-  id: "about",
-  label: "About Me",
-  render: ({ about: a }) => {
-    const lines = [
-      a.working && `- 🔭 Currently working on **${a.working}**`,
-      a.studying && `- 🎓 Studying **${a.studying}**`,
-      a.learning && `- 🌱 Learning **${a.learning}**`,
-      a.funFact && `- ⚡ Fun fact: ${a.funFact}`,
-    ].filter(Boolean);
-    return lines.length ? `## About Me\n\n${lines.join("\n")}` : "";
-  },
-};
+function safeUrl(value: string): string | undefined {
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : undefined;
+  } catch { return undefined; }
+}
 
-function hrefOrPath(value: string, prefix: string): string {
-  const trimmed = value.trim();
-  if (/^https?:\/\//i.test(trimmed)) return trimmed;
-  return `${prefix}${trimmed.replace(/^@/, "")}`;
+function profileLink(value: string, prefix: string): string {
+  return safeUrl(value) ?? `${prefix}${encodeURIComponent(value.trim().replace(/^@/, ""))}`;
 }
 
 function badge(label: string, color: string, logo: string, href: string): string {
@@ -52,188 +25,110 @@ function badge(label: string, color: string, logo: string, href: string): string
   return `<a href="${href}"><img src="${src}" alt="${label}" /></a>`;
 }
 
+function githubUsername(profile: Profile): string {
+  const raw = profile.githubStats.githubUsername.trim() || profile.socials.github.trim();
+  return raw.replace(/^https?:\/\/(www\.)?github\.com\//i, "").replace(/\/.*$/, "").replace(/^@/, "");
+}
+
+const header: Section = {
+  id: "header", label: "Header",
+  render: ({ header: value }) => !value.name ? "" : [
+    `# Hi, I'm ${markdownText(value.name)}`,
+    value.role || value.company ? `### ${[value.role && markdownText(value.role), value.company && `@ ${markdownText(value.company)}`].filter(Boolean).join(" ")}` : "",
+    value.tagline ? `> ${markdownText(value.tagline)}` : "",
+  ].filter(Boolean).join("\n\n"),
+};
+
+const about: Section = {
+  id: "about", label: "About Me",
+  render: ({ about: value }) => {
+    const lines = [value.working && `- Currently working on **${markdownText(value.working)}**`, value.studying && `- Studying **${markdownText(value.studying)}**`, value.learning && `- Learning **${markdownText(value.learning)}**`, value.funFact && `- Fun fact: ${markdownText(value.funFact)}`].filter(Boolean);
+    return lines.length ? `## About Me\n\n${lines.join("\n")}` : "";
+  },
+};
+
 const socials: Section = {
-  id: "socials",
-  label: "Socials",
-  render: ({ socials: s }) => {
+  id: "socials", label: "Socials",
+  render: ({ socials: value }) => {
+    const portfolio = safeUrl(value.portfolio);
     const badges = [
-      s.github &&
-        badge("GitHub", "181717", "github", hrefOrPath(s.github, "https://github.com/")),
-      s.linkedin &&
-        badge(
-          "LinkedIn",
-          "0A66C2",
-          "linkedin",
-          hrefOrPath(s.linkedin, "https://linkedin.com/in/")
-        ),
-      s.x && badge("X", "000000", "x", hrefOrPath(s.x, "https://x.com/")),
-      s.portfolio &&
-        badge("Portfolio", "5B21B6", "globe", hrefOrPath(s.portfolio, "https://")),
-      s.email &&
-        badge("Email", "D14836", "gmail", `mailto:${s.email.trim()}`),
+      value.github && badge("GitHub", "181717", "github", profileLink(value.github, "https://github.com/")),
+      value.linkedin && badge("LinkedIn", "0A66C2", "linkedin", profileLink(value.linkedin, "https://linkedin.com/in/")),
+      value.x && badge("X", "000000", "x", profileLink(value.x, "https://x.com/")),
+      portfolio && badge("Portfolio", "5B21B6", "globe", portfolio),
+      value.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.email) && badge("Email", "D14836", "gmail", `mailto:${encodeURIComponent(value.email.trim())}`),
     ].filter(Boolean);
     return badges.length ? `## Connect with me\n\n<p>\n  ${badges.join("\n  ")}\n</p>` : "";
   },
 };
 
-const skills: Section = {
-  id: "skills",
-  label: "Skills",
-  render: ({ skills }) =>
-    skills.length
-      ? `## 🛠️ Skills\n\n<p>\n  <img src="https://skillicons.dev/icons?i=${skills.join(",")}" />\n</p>`
-      : "",
-};
-
-function githubUsername(p: Profile): string {
-  const raw = p.githubStats.githubUsername.trim() || p.socials.github.trim();
-  return raw
-    .replace(/^https?:\/\/(www\.)?github\.com\//i, "")
-    .replace(/\/.*$/, "")
-    .replace(/^@/, "");
-}
+const skills: Section = { id: "skills", label: "Skills", render: ({ skills: value }) => value.length ? `## Skills\n\n<p>\n  <img src="https://skillicons.dev/icons?i=${value.map(encodeURIComponent).join(",")}" alt="Skills" />\n</p>` : "" };
 
 const githubStats: Section = {
-  id: "githubStats",
-  label: "GitHub Stats",
-  render: (p) => {
-    const user = githubUsername(p);
-    const { showStats, showTopLanguages, showStreak } = p.githubStats;
+  id: "githubStats", label: "GitHub Stats",
+  render: (profile) => {
+    const user = githubUsername(profile);
+    const { showStats, showTopLanguages, showStreak } = profile.githubStats;
     if (!user || (!showStats && !showTopLanguages && !showStreak)) return "";
-
-    const images = [
-      showStats &&
-        `<img src="${GITHUB_README_STATS_BASE}/api?username=${encodeURIComponent(user)}&show_icons=true" alt="${user}'s GitHub stats" />`,
-      showTopLanguages &&
-        `<img src="${GITHUB_README_STATS_BASE}/api/top-langs/?username=${encodeURIComponent(user)}&layout=compact" alt="${user}'s top languages" />`,
-      showStreak &&
-        `<img src="${GITHUB_STREAK_STATS_BASE}/?user=${encodeURIComponent(user)}" alt="${user}'s streak" />`,
-    ].filter(Boolean);
-
+    const name = markdownText(user);
+    const images = [showStats && `<img src="${GITHUB_README_STATS_BASE}/api?username=${encodeURIComponent(user)}&show_icons=true" alt="${name}'s GitHub stats" />`, showTopLanguages && `<img src="${GITHUB_README_STATS_BASE}/api/top-langs/?username=${encodeURIComponent(user)}&layout=compact" alt="${name}'s top languages" />`, showStreak && `<img src="${GITHUB_STREAK_STATS_BASE}/?user=${encodeURIComponent(user)}" alt="${name}'s streak" />`].filter(Boolean);
     return `## GitHub Stats\n\n<p>\n  ${images.join("\n  ")}\n</p>`;
   },
 };
 
 const projects: Section = {
-  id: "projects",
-  label: "Projects",
-  render: ({ projects }) => {
-    if (!projects.length) return "";
-    const items = projects
-      .filter((p) => p.title.trim())
-      .map((p) => {
-        const links = [
-          p.repoUrl && `[Repo](${p.repoUrl})`,
-          p.liveUrl && `[Live](${p.liveUrl})`,
-        ]
-          .filter(Boolean)
-          .join(" · ");
-        return `- **${p.title}**: ${p.description}${links ? ` (${links})` : ""}`;
-      });
-    if (!items.length) return "";
-    return `## 🚀 Projects\n\n${items.join("\n")}`;
+  id: "projects", label: "Projects",
+  render: ({ projects: value }) => {
+    const items = value.filter((project) => project.title.trim()).map((project) => {
+      const repo = safeUrl(project.repoUrl); const live = safeUrl(project.liveUrl);
+      const links = [repo && `[Repo](${repo})`, live && `[Live](${live})`].filter(Boolean).join(" · ");
+      return `- **${markdownText(project.title)}**: ${markdownText(project.description)}${links ? ` (${links})` : ""}`;
+    });
+    return items.length ? `## Projects\n\n${items.join("\n")}` : "";
   },
 };
 
 const experience: Section = {
-  id: "experience",
-  label: "Experience",
-  render: ({ experience }) => {
-    const items = experience
-      .filter((e) => e.company.trim() || e.role.trim())
-      .map((e) => {
-        const heading = [e.role && `**${e.role}**`, e.company && `@ ${e.company}`]
-          .filter(Boolean)
-          .join(" ");
-        const period = e.period.trim() ? ` (${e.period})` : "";
-        const summary = e.summary.trim() ? `\n  ${e.summary}` : "";
-        return `- ${heading}${period}${summary}`;
-      });
+  id: "experience", label: "Experience",
+  render: ({ experience: value }) => {
+    const items = value.filter((entry) => entry.company.trim() || entry.role.trim()).map((entry) => {
+      const heading = [entry.role && `**${markdownText(entry.role)}**`, entry.company && `@ ${markdownText(entry.company)}`].filter(Boolean).join(" ");
+      return `- ${heading}${entry.period.trim() ? ` (${markdownText(entry.period)})` : ""}${entry.summary.trim() ? `\n  ${markdownText(entry.summary)}` : ""}`;
+    });
     return items.length ? `## Experience\n\n${items.join("\n")}` : "";
   },
 };
 
 const education: Section = {
-  id: "education",
-  label: "Education",
-  render: ({ education }) => {
-    const items = education
-      .filter((e) => e.title.trim() || e.school.trim())
-      .map((e) => {
-        const main = [e.title && `**${e.title}**`, e.school].filter(Boolean).join(" — ");
-        const year = e.year.trim() ? ` (${e.year})` : "";
-        return `- ${main}${year}`;
-      });
+  id: "education", label: "Education",
+  render: ({ education: value }) => {
+    const items = value.filter((entry) => entry.title.trim() || entry.school.trim()).map((entry) => {
+      const main = [entry.title && `**${markdownText(entry.title)}**`, entry.school && markdownText(entry.school)].filter(Boolean).join(" — ");
+      return `- ${main}${entry.year.trim() ? ` (${markdownText(entry.year)})` : ""}`;
+    });
     return items.length ? `## Education & Certifications\n\n${items.join("\n")}` : "";
   },
 };
 
-const interests: Section = {
-  id: "interests",
-  label: "Interests",
-  render: ({ interests }) =>
-    interests.length ? `## Interests\n\n${interests.map((i) => `\`${i}\``).join(" · ")}` : "",
-};
+const interests: Section = { id: "interests", label: "Interests", render: ({ interests: value }) => value.length ? `## Interests\n\n${value.map((item) => `\`${markdownText(item)}\``).join(" · ")}` : "" };
 
 const extras: Section = {
-  id: "extras",
-  label: "Extras",
-  render: (p) => {
-    const user = githubUsername(p);
-    const parts = [
-      p.extras.quote.trim() && `> ${p.extras.quote.trim()}`,
-      p.extras.showVisitorCounter &&
-        user &&
-        `<img src="https://komarev.com/ghpvc/?username=${encodeURIComponent(user)}&label=Profile%20views" alt="profile views" />`,
-      p.extras.supportUrl.trim() &&
-        `[☕ Support me](${p.extras.supportUrl.trim()})`,
-    ].filter(Boolean);
+  id: "extras", label: "Extras",
+  render: (profile) => {
+    const user = githubUsername(profile); const support = safeUrl(profile.extras.supportUrl);
+    const parts = [profile.extras.quote.trim() && `> ${markdownText(profile.extras.quote)}`, profile.extras.showVisitorCounter && user && `<img src="https://komarev.com/ghpvc/?username=${encodeURIComponent(user)}&label=Profile%20views" alt="profile views" />`, support && `[Support me](${support})`].filter(Boolean);
     return parts.length ? parts.join("\n\n") : "";
   },
 };
 
-export const sections: Section[] = [
-  header,
-  about,
-  socials,
-  skills,
-  githubStats,
-  projects,
-  experience,
-  education,
-  interests,
-  extras,
-];
+export const sections: Section[] = [header, about, socials, skills, githubStats, projects, experience, education, interests, extras];
+export const defaultSectionOrder = sections.map((section) => section.id);
+export type MarkdownOptions = { sectionOrder?: string[]; disabledSections?: string[] };
 
-export const defaultSectionOrder = sections.map((s) => s.id);
-
-export type MarkdownOptions = {
-  sectionOrder?: string[];
-  disabledSections?: string[];
-};
-
-export function generateMarkdown(
-  profile: Profile,
-  { sectionOrder = defaultSectionOrder, disabledSections = [] }: MarkdownOptions = {}
-): string {
-  const byId = new Map(sections.map((s) => [s.id, s]));
-  const disabled = new Set(disabledSections);
-  const seen = new Set<string>();
-  const ordered: Section[] = [];
-
-  for (const id of sectionOrder) {
-    const section = byId.get(id);
-    if (!section || seen.has(id)) continue;
-    seen.add(id);
-    if (!disabled.has(id)) ordered.push(section);
-  }
-
-  for (const section of sections) {
-    if (!seen.has(section.id) && !disabled.has(section.id)) ordered.push(section);
-  }
-
-  return ordered
-    .map((s) => s.render(profile))
-    .filter(Boolean)
-    .join("\n\n");
+export function generateMarkdown(profile: Profile, { sectionOrder = defaultSectionOrder, disabledSections = [] }: MarkdownOptions = {}): string {
+  const byId = new Map(sections.map((section) => [section.id, section]));
+  const disabled = new Set(disabledSections); const seen = new Set<string>(); const ordered: Section[] = [];
+  for (const id of sectionOrder) { const section = byId.get(id); if (!section || seen.has(id)) continue; seen.add(id); if (!disabled.has(id)) ordered.push(section); }
+  for (const section of sections) if (!seen.has(section.id) && !disabled.has(section.id)) ordered.push(section);
+  return ordered.map((section) => section.render(profile)).filter(Boolean).join("\n\n");
 }
