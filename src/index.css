@@ -55,6 +55,8 @@
 .editor-button-primary:hover { background: color-mix(in srgb, var(--accent) 88%, black); }
 .editor-button-quiet { background: color-mix(in srgb, var(--panel) 80%, var(--accent-soft)); color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 85%, transparent); }
 .editor-button-quiet:hover { background: var(--accent-soft); }
+.editor-icon-button { display: inline-grid; width: 2.25rem; height: 2.25rem; place-items: center; border-radius: .6rem; background: color-mix(in srgb, var(--panel) 80%, var(--accent-soft)); color: var(--ink); font-size: 1.2rem; line-height: 1; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 85%, transparent); }
+.editor-icon-button:hover { background: var(--accent-soft); color: var(--accent); }
 .editor-template-picker { display: flex; align-items: center; gap: .45rem; color: var(--muted); font-size: .75rem; font-weight: 700; }
 .editor-select { border: 0; border-radius: .5rem; padding: .5rem .65rem; background: color-mix(in srgb, var(--panel) 80%, var(--accent-soft)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 85%, transparent); }
 .editor-import { border-radius: .75rem; background: color-mix(in srgb, var(--accent-soft) 60%, var(--panel)); }

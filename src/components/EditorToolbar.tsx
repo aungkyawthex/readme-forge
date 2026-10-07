@@ -40,11 +40,12 @@ export function EditorToolbar() {
       </div>
       <button
         type="button"
-        className="editor-button editor-button-quiet"
+        className="editor-icon-button"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+        title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       >
-        {theme === "light" ? "Dark mode" : "Light mode"}
+        <span aria-hidden="true">{theme === "light" ? "☾" : "☀"}</span>
       </button>
       <label className="editor-template-picker">
         <span>Template</span>

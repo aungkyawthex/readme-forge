@@ -53,7 +53,7 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
             className={`output-tab ${tab === "raw" ? "output-tab-active" : ""}`}
             onClick={() => setTab("raw")}
           >
-            Raw Markdown
+            Markdown
           </button>
         </div>
         <div className="flex flex-wrap justify-end gap-2">
@@ -100,7 +100,7 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
         ) : (
           <textarea
             readOnly
-            aria-label="Raw Markdown"
+            aria-label="Markdown"
             className="editor-input h-full min-h-[24rem] w-full resize-none font-mono text-sm"
             value={markdown}
           />
