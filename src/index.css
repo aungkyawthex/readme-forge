@@ -31,7 +31,8 @@
 
 .app-shell :is(.toolbar, .output-panel) { background: var(--panel); border-color: var(--line); }
 .app-shell :is(input, textarea, select) { background: var(--panel); color: var(--ink); border-color: var(--line); }
-.app-shell button:focus-visible, .app-shell input:focus-visible, .app-shell textarea:focus-visible, .app-shell select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app-shell button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app-shell :is(input, textarea, select):focus-visible { outline: none; }
 .app-shell button { cursor: pointer; }
 .app-shell nav { background: color-mix(in srgb, var(--panel) 72%, transparent); padding: .35rem; border: 1px solid var(--line); border-radius: .75rem; }
 .app-shell [aria-current="page"] { background: var(--accent) !important; }
@@ -40,10 +41,10 @@
 .editor-panel { padding: 1.25rem 1rem; }
 .editor-kicker { margin-bottom: .25rem; color: var(--muted); font: 700 .65rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
 .editor-label { display: block; color: var(--ink); font-size: .75rem; font-weight: 750; letter-spacing: .02em; }
-.editor-input { width: 100%; border: 1px solid transparent; border-radius: .6rem; padding: .65rem .8rem; background: color-mix(in srgb, var(--panel) 82%, var(--accent-soft)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent); }
-.editor-input:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, var(--line)); }
-.editor-input:focus { border-color: transparent; box-shadow: inset 0 0 0 2px var(--accent); outline: none; }
-.editor-input-error { box-shadow: inset 0 0 0 1px #dc2626; }
+.editor-input { width: 100%; border: 1px solid var(--line); border-radius: .6rem; padding: .65rem .8rem; background: color-mix(in srgb, var(--panel) 82%, var(--accent-soft)); box-shadow: none; }
+.editor-input:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.editor-input:focus { border-color: var(--accent); box-shadow: none; outline: none; }
+.editor-input-error { border-color: #dc2626; }
 .editor-card { border-radius: .85rem; background: color-mix(in srgb, var(--panel) 88%, var(--accent-soft)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent), 0 .3rem .8rem color-mix(in srgb, var(--ink) 5%, transparent); }
 .editor-card-title { color: var(--ink); font-size: .9rem; font-weight: 750; }
 .editor-remove { color: #c2413b; font-size: .75rem; font-weight: 700; }
