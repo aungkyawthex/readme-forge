@@ -8,9 +8,11 @@ type ProfileState = {
   profile: Profile;
   disabledSections: string[];
   sectionOrder: string[];
+  theme: "light" | "dark";
   updateSection: <K extends keyof Profile>(key: K, value: Profile[K]) => void;
   toggleSection: (id: string) => void;
   setSectionOrder: (sectionOrder: string[]) => void;
+  setTheme: (theme: "light" | "dark") => void;
   loadTemplate: (id: string) => void;
   reset: () => void;
 };
@@ -19,6 +21,7 @@ type PersistedSlice = {
   profile?: Partial<Profile>;
   disabledSections?: string[];
   sectionOrder?: string[];
+  theme?: "light" | "dark";
 };
 
 function withIds<T extends { id: string }>(
@@ -84,6 +87,7 @@ export const useProfile = create<ProfileState>()(
       profile: emptyProfile,
       disabledSections: [],
       sectionOrder: defaultSectionOrder,
+      theme: "light",
       updateSection: (key, value) =>
         set((state) => ({ profile: { ...state.profile, [key]: value } })),
       toggleSection: (id) =>
@@ -93,6 +97,7 @@ export const useProfile = create<ProfileState>()(
             : [...state.disabledSections, id],
         })),
       setSectionOrder: (sectionOrder) => set({ sectionOrder: normalizeOrder(sectionOrder) }),
+      setTheme: (theme) => set({ theme }),
       loadTemplate: (id) => {
         const template = templates.find((t) => t.id === id);
         if (!template) return;
@@ -123,6 +128,7 @@ export const useProfile = create<ProfileState>()(
           disabledSections: (saved?.disabledSections ?? []).filter((id) =>
             known.has(id)
           ),
+          theme: saved?.theme === "dark" ? "dark" : "light",
         };
       },
     }

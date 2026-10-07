@@ -7,6 +7,8 @@ export function EditorToolbar() {
   const loadTemplate = useProfile((s) => s.loadTemplate);
   const reset = useProfile((s) => s.reset);
   const updateSection = useProfile((s) => s.updateSection);
+  const theme = useProfile((s) => s.theme);
+  const setTheme = useProfile((s) => s.setTheme);
   const [importText, setImportText] = useState("");
   const [importOpen, setImportOpen] = useState(false);
 
@@ -31,8 +33,19 @@ export function EditorToolbar() {
   };
 
   return (
-    <header className="flex flex-wrap items-center gap-3">
-      <h1 className="mr-auto text-lg font-semibold">readme-forge</h1>
+    <header className="toolbar flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3">
+      <div className="mr-auto">
+        <h1 className="text-lg font-semibold tracking-tight">readme-forge</h1>
+        <p className="text-xs text-[var(--muted)]">Shape your GitHub introduction.</p>
+      </div>
+      <button
+        type="button"
+        className="rounded border px-3 py-1 text-sm"
+        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+      >
+        {theme === "light" ? "Dark mode" : "Light mode"}
+      </button>
       <label className="flex items-center gap-2 text-sm">
         <span>Load template</span>
         <select
