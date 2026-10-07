@@ -13,6 +13,7 @@ import { InterestsForm } from "./components/forms/InterestsForm";
 import { ExtrasForm } from "./components/forms/ExtrasForm";
 import { SectionSidebar } from "./components/SectionSidebar";
 import { OutputPanel } from "./components/OutputPanel";
+import { EditorToolbar } from "./components/EditorToolbar";
 
 const forms = {
   header: HeaderForm,
@@ -39,18 +40,21 @@ export default function App() {
   const activeLabel = sections.find((s) => s.id === activeId)?.label ?? "";
 
   return (
-    <div className="grid h-screen grid-cols-[16rem_1fr_1fr] gap-6 p-6">
-      <SectionSidebar
-        activeId={activeId}
-        onSelect={(id) => setActiveId(id as SectionId)}
-      />
+    <div className="flex h-screen flex-col gap-4 p-6">
+      <EditorToolbar />
+      <div className="grid min-h-0 flex-1 grid-cols-[16rem_1fr_1fr] gap-6">
+        <SectionSidebar
+          activeId={activeId}
+          onSelect={(id) => setActiveId(id as SectionId)}
+        />
 
-      <section className="overflow-y-auto">
-        <h2 className="mb-4 text-lg font-semibold">{activeLabel}</h2>
-        <ActiveForm />
-      </section>
+        <section className="overflow-y-auto">
+          <h2 className="mb-4 text-lg font-semibold">{activeLabel}</h2>
+          <ActiveForm />
+        </section>
 
-      <OutputPanel markdown={markdown} />
+        <OutputPanel markdown={markdown} />
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { emptyProfile, type Profile } from "../types/profile";
 import { defaultSectionOrder } from "../sections";
+import { templates } from "../templates";
 
 type ProfileState = {
   profile: Profile;
@@ -10,6 +11,7 @@ type ProfileState = {
   updateSection: <K extends keyof Profile>(key: K, value: Profile[K]) => void;
   toggleSection: (id: string) => void;
   setSectionOrder: (sectionOrder: string[]) => void;
+  loadTemplate: (id: string) => void;
   reset: () => void;
 };
 
@@ -65,8 +67,14 @@ function mergeProfile(saved?: Partial<Profile>): Profile {
 
 function normalizeOrder(saved?: string[]): string[] {
   const known = new Set(defaultSectionOrder);
-  const kept = (saved ?? defaultSectionOrder).filter((id) => known.has(id));
-  const missing = defaultSectionOrder.filter((id) => !kept.includes(id));
+  const kept: string[] = [];
+  const seen = new Set<string>();
+  for (const id of saved ?? defaultSectionOrder) {
+    if (!known.has(id) || seen.has(id)) continue;
+    seen.add(id);
+    kept.push(id);
+  }
+  const missing = defaultSectionOrder.filter((id) => !seen.has(id));
   return [...kept, ...missing];
 }
 
@@ -85,6 +93,17 @@ export const useProfile = create<ProfileState>()(
             : [...state.disabledSections, id],
         })),
       setSectionOrder: (sectionOrder) => set({ sectionOrder: normalizeOrder(sectionOrder) }),
+      loadTemplate: (id) => {
+        const template = templates.find((t) => t.id === id);
+        if (!template) return;
+        set({
+          profile: template.profile,
+          sectionOrder: normalizeOrder(template.sectionOrder),
+          disabledSections: template.disabledSections.filter((sectionId) =>
+            defaultSectionOrder.includes(sectionId)
+          ),
+        });
+      },
       reset: () =>
         set({
           profile: emptyProfile,
