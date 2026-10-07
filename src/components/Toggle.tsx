@@ -6,7 +6,7 @@ type ToggleProps = {
 
 export function Toggle({ label, checked, onChange }: ToggleProps) {
   return (
-    <label className="flex items-center gap-2 text-sm">
+    <label className="editor-toggle">
       <input
         type="checkbox"
         checked={checked}

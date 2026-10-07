@@ -51,14 +51,14 @@ function SortableSection({
     <div
       ref={setNodeRef}
       style={{ transform: transformToCss(transform), transition }}
-      className={`flex items-center gap-1 rounded ${isDragging ? "z-10 bg-white shadow" : ""} ${
+      className={`sidebar-item flex items-center gap-1 ${isDragging ? "z-10 shadow-lg" : ""} ${
         enabled ? "" : "opacity-50"
       }`}
     >
       <button
         type="button"
         ref={setActivatorNodeRef}
-        className="cursor-grab rounded px-1 py-2 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black"
+        className="sidebar-grip cursor-grab"
         aria-label={`Reorder ${label}`}
         {...attributes}
         {...listeners}
@@ -68,9 +68,7 @@ function SortableSection({
       <button
         type="button"
         aria-current={selected ? "page" : undefined}
-        className={`min-w-0 flex-1 rounded px-2 py-2 text-left text-sm ${
-          selected ? "bg-black text-white" : "hover:bg-gray-100"
-        }`}
+        className={`sidebar-select min-w-0 flex-1 text-left text-sm ${selected ? "sidebar-select-active" : ""}`}
         onClick={onSelect}
       >
         {label}

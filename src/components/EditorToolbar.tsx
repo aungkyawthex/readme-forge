@@ -40,16 +40,16 @@ export function EditorToolbar() {
       </div>
       <button
         type="button"
-        className="rounded border px-3 py-1 text-sm"
+        className="editor-button editor-button-quiet"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       >
         {theme === "light" ? "Dark mode" : "Light mode"}
       </button>
-      <label className="flex items-center gap-2 text-sm">
-        <span>Load template</span>
+      <label className="editor-template-picker">
+        <span>Template</span>
         <select
-          className="rounded border px-2 py-1"
+          className="editor-select"
           defaultValue=""
           onChange={(e) => {
             onLoadTemplate(e.target.value);
@@ -66,22 +66,22 @@ export function EditorToolbar() {
           ))}
         </select>
       </label>
-      <button type="button" className="rounded border px-3 py-1 text-sm" onClick={onReset}>
+      <button type="button" className="editor-button editor-button-quiet" onClick={onReset}>
         Reset
       </button>
       <button
         type="button"
-        className="rounded border px-3 py-1 text-sm"
+        className="editor-button editor-button-quiet"
         onClick={() => setImportOpen((open) => !open)}
       >
         Import README
       </button>
       {importOpen && (
-        <div className="w-full space-y-2 rounded border p-3">
+        <div className="editor-import w-full space-y-3 p-4">
           <label className="block space-y-1">
-            <span className="text-sm font-medium">Paste Markdown</span>
+            <span className="editor-label">Paste Markdown</span>
             <textarea
-              className="h-32 w-full rounded-md border px-3 py-2 font-mono text-sm"
+              className="editor-input h-32 font-mono text-sm"
               value={importText}
               onChange={(e) => setImportText(e.target.value)}
               placeholder="Only Header and About fields are filled from the paste."
@@ -89,7 +89,7 @@ export function EditorToolbar() {
           </label>
           <button
             type="button"
-            className="rounded bg-black px-3 py-1.5 text-sm text-white"
+            className="editor-button editor-button-primary"
             onClick={onImport}
           >
             Fill Header & About

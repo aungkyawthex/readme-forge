@@ -35,15 +35,13 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
 
   return (
     <section className="output-panel flex min-h-0 flex-col overflow-hidden rounded-lg border">
-      <div className="flex items-center justify-between gap-2 border-b px-4 py-2">
-        <div className="flex gap-1" role="tablist" aria-label="Output">
+      <div className="output-toolbar flex items-center justify-between gap-2 px-4 py-3">
+        <div className="output-tabs" role="tablist" aria-label="Output">
           <button
             type="button"
             role="tab"
             aria-selected={tab === "preview"}
-            className={`rounded px-3 py-1 text-sm ${
-              tab === "preview" ? "bg-black text-white" : "hover:bg-gray-100"
-            }`}
+            className={`output-tab ${tab === "preview" ? "output-tab-active" : ""}`}
             onClick={() => setTab("preview")}
           >
             Preview
@@ -52,9 +50,7 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
             type="button"
             role="tab"
             aria-selected={tab === "raw"}
-            className={`rounded px-3 py-1 text-sm ${
-              tab === "raw" ? "bg-black text-white" : "hover:bg-gray-100"
-            }`}
+            className={`output-tab ${tab === "raw" ? "output-tab-active" : ""}`}
             onClick={() => setTab("raw")}
           >
             Raw Markdown
@@ -63,14 +59,14 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
         <div className="flex flex-wrap justify-end gap-2">
           <button
             type="button"
-            className="rounded bg-black px-3 py-1.5 text-sm text-white"
+            className="editor-button editor-button-primary"
             onClick={copy}
           >
             {copied ? "Copied!" : "Copy Markdown"}
           </button>
           <button
             type="button"
-            className="rounded border px-3 py-1.5 text-sm"
+            className="editor-button editor-button-quiet"
             onClick={() => downloadReadme(markdown)}
           >
             Download README.md
@@ -83,7 +79,7 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
             <span>GitHub canvas</span>
             <button
               type="button"
-              className="rounded border px-2 py-1"
+              className="canvas-toggle"
               aria-pressed={githubTheme === "light"}
               onClick={() => setGithubTheme("light")}
             >
@@ -91,7 +87,7 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
             </button>
             <button
               type="button"
-              className="rounded border px-2 py-1"
+              className="canvas-toggle"
               aria-pressed={githubTheme === "dark"}
               onClick={() => setGithubTheme("dark")}
             >
@@ -105,7 +101,7 @@ export function OutputPanel({ markdown }: OutputPanelProps) {
           <textarea
             readOnly
             aria-label="Raw Markdown"
-            className="h-full min-h-[24rem] w-full resize-none font-mono text-sm"
+            className="editor-input h-full min-h-[24rem] w-full resize-none font-mono text-sm"
             value={markdown}
           />
         )}

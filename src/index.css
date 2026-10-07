@@ -36,6 +36,50 @@
 .app-shell nav { background: color-mix(in srgb, var(--panel) 72%, transparent); padding: .35rem; border: 1px solid var(--line); border-radius: .75rem; }
 .app-shell [aria-current="page"] { background: var(--accent) !important; }
 
+/* Editor controls share a restrained, paper-workshop treatment instead of raw utility borders. */
+.editor-panel { padding: 1.25rem 1rem; }
+.editor-kicker { margin-bottom: .25rem; color: var(--muted); font: 700 .65rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+.editor-label { display: block; color: var(--ink); font-size: .75rem; font-weight: 750; letter-spacing: .02em; }
+.editor-input { width: 100%; border: 1px solid transparent; border-radius: .6rem; padding: .65rem .8rem; background: color-mix(in srgb, var(--panel) 82%, var(--accent-soft)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent); }
+.editor-input:hover { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 35%, var(--line)); }
+.editor-input:focus { border-color: transparent; box-shadow: inset 0 0 0 2px var(--accent); outline: none; }
+.editor-input-error { box-shadow: inset 0 0 0 1px #dc2626; }
+.editor-card { border-radius: .85rem; background: color-mix(in srgb, var(--panel) 88%, var(--accent-soft)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent), 0 .3rem .8rem color-mix(in srgb, var(--ink) 5%, transparent); }
+.editor-card-title { color: var(--ink); font-size: .9rem; font-weight: 750; }
+.editor-remove { color: #c2413b; font-size: .75rem; font-weight: 700; }
+.editor-remove:hover { color: #9f2c28; text-decoration: underline; }
+.editor-button { display: inline-flex; align-items: center; justify-content: center; border-radius: .55rem; padding: .55rem .8rem; font-size: .8rem; font-weight: 700; line-height: 1; transition: transform .15s ease, background-color .15s ease; }
+.editor-button:hover { transform: translateY(-1px); }
+.editor-button-primary { background: var(--accent); color: white; box-shadow: 0 .2rem .5rem color-mix(in srgb, var(--accent) 26%, transparent); }
+.editor-button-primary:hover { background: color-mix(in srgb, var(--accent) 88%, black); }
+.editor-button-quiet { background: color-mix(in srgb, var(--panel) 80%, var(--accent-soft)); color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 85%, transparent); }
+.editor-button-quiet:hover { background: var(--accent-soft); }
+.editor-template-picker { display: flex; align-items: center; gap: .45rem; color: var(--muted); font-size: .75rem; font-weight: 700; }
+.editor-select { border: 0; border-radius: .5rem; padding: .5rem .65rem; background: color-mix(in srgb, var(--panel) 80%, var(--accent-soft)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 85%, transparent); }
+.editor-import { border-radius: .75rem; background: color-mix(in srgb, var(--accent-soft) 60%, var(--panel)); }
+.editor-tag { display: inline-flex; align-items: center; gap: .25rem; border-radius: 999px; padding: .3rem .55rem .3rem .7rem; background: var(--accent-soft); color: var(--ink); font-size: .78rem; font-weight: 650; }
+.editor-tag-remove { border-radius: 999px; padding: 0 .25rem; color: var(--muted); }
+.editor-tag-remove:hover { color: var(--ink); background: color-mix(in srgb, var(--accent) 15%, transparent); }
+.editor-toggle { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); font-size: .85rem; font-weight: 650; }
+.editor-toggle input, .sidebar-item input { accent-color: var(--accent); }
+
+.app-shell nav { padding: .45rem; border: 0; border-radius: .9rem; background: color-mix(in srgb, var(--panel) 62%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 82%, transparent); }
+.sidebar-item { border-radius: .6rem; transition: background-color .15s ease, opacity .15s ease; }
+.sidebar-item:hover { background: color-mix(in srgb, var(--accent-soft) 50%, transparent); }
+.sidebar-grip { border-radius: .45rem; padding: .55rem .38rem; color: var(--muted); font-size: .8rem; letter-spacing: -2px; }
+.sidebar-grip:hover { background: var(--accent-soft); color: var(--accent); }
+.sidebar-select { border-radius: .5rem; padding: .6rem .65rem; color: var(--ink); font-weight: 600; }
+.sidebar-select:hover { color: var(--accent); }
+.sidebar-select-active { background: var(--accent); color: white; box-shadow: 0 .18rem .5rem color-mix(in srgb, var(--accent) 24%, transparent); }
+
+.output-toolbar { border-bottom: 1px solid color-mix(in srgb, var(--line) 85%, transparent); }
+.output-tabs { display: inline-flex; gap: .2rem; border-radius: .6rem; padding: .2rem; background: color-mix(in srgb, var(--accent-soft) 58%, var(--panel)); }
+.output-tab { border-radius: .45rem; padding: .45rem .65rem; color: var(--muted); font-size: .78rem; font-weight: 700; }
+.output-tab:hover { color: var(--ink); }
+.output-tab-active { background: var(--panel); color: var(--accent); box-shadow: 0 .1rem .35rem color-mix(in srgb, var(--ink) 10%, transparent); }
+.canvas-toggle { border-radius: .45rem; padding: .3rem .5rem; color: var(--muted); font-size: .7rem; font-weight: 700; background: color-mix(in srgb, var(--panel) 70%, var(--accent-soft)); }
+.canvas-toggle[aria-pressed="true"] { color: white; background: var(--accent); }
+
 .github-preview { border: 1px solid #d0d7de; border-radius: .5rem; padding: 1.5rem; }
 .github-light { color: #1f2328; background: #ffffff; }
 .github-dark { color: #f0f6fc; background: #0d1117; border-color: #30363d; }

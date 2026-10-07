@@ -9,11 +9,11 @@ type FieldProps = {
 
 export function Field({ label, value, onChange, placeholder, multiline, error }: FieldProps) {
   return (
-    <label className="block space-y-1">
-      <span className="text-sm font-medium">{label}</span>
+    <label className="editor-field block space-y-1.5">
+      <span className="editor-label">{label}</span>
       {multiline ? (
         <textarea
-          className={`w-full rounded-md border px-3 py-2 ${error ? "border-red-500" : ""}`}
+          className={`editor-input ${error ? "editor-input-error" : ""}`}
           rows={3}
           value={value}
           placeholder={placeholder}
@@ -22,7 +22,7 @@ export function Field({ label, value, onChange, placeholder, multiline, error }:
         />
       ) : (
         <input
-          className={`w-full rounded-md border px-3 py-2 ${error ? "border-red-500" : ""}`}
+          className={`editor-input ${error ? "editor-input-error" : ""}`}
           value={value}
           placeholder={placeholder}
           onChange={(e) => onChange(e.target.value)}

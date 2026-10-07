@@ -19,20 +19,20 @@ export function TagInput({ label, tags, onChange, placeholder }: TagInputProps) 
 
   return (
     <div className="space-y-2">
-      <label htmlFor={inputId} className="text-sm font-medium">
+      <label htmlFor={inputId} className="editor-label">
         {label}
       </label>
       <div className="flex flex-wrap gap-2">
         {tags.map((t) => (
           <span
             key={t}
-            className="flex items-center gap-1 rounded-full border px-3 py-1 text-sm"
+            className="editor-tag"
           >
             {t}
             <button
               type="button"
               aria-label={`Remove ${t}`}
-              className="rounded px-1 hover:bg-gray-100"
+              className="editor-tag-remove"
               onClick={() => onChange(tags.filter((x) => x !== t))}
             >
               ×
@@ -42,7 +42,7 @@ export function TagInput({ label, tags, onChange, placeholder }: TagInputProps) 
       </div>
       <input
         id={inputId}
-        className="w-full rounded-md border px-3 py-2"
+        className="editor-input"
         value={draft}
         placeholder={placeholder}
         onChange={(e) => setDraft(e.target.value)}

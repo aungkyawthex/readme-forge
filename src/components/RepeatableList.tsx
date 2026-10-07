@@ -23,12 +23,12 @@ export function RepeatableList<T extends { id: string }>({
   return (
     <div className="space-y-4">
       {items.map((item, index) => (
-        <div key={item.id} className="space-y-3 rounded-lg border p-4">
+        <div key={item.id} className="editor-card space-y-4 p-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">{itemTitle(index)}</h3>
+            <h3 className="editor-card-title">{itemTitle(index)}</h3>
             <button
               type="button"
-              className="text-sm text-red-600 hover:underline"
+              className="editor-remove"
               onClick={() => onChange(items.filter((x) => x.id !== item.id))}
             >
               Remove
@@ -39,7 +39,7 @@ export function RepeatableList<T extends { id: string }>({
       ))}
       <button
         type="button"
-        className="rounded bg-black px-4 py-2 text-white"
+        className="editor-button editor-button-primary"
         onClick={() => onChange([...items, createItem()])}
       >
         {addLabel}

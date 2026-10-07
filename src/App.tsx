@@ -73,7 +73,8 @@ export default function App() {
         </div>
 
         <section className={`editor-panel overflow-y-auto ${mobilePanel === "preview" ? "hidden lg:block" : ""}`}>
-          <h2 className="mb-4 text-lg font-semibold">{activeLabel}</h2>
+          <p className="editor-kicker">Editing section</p>
+          <h2 className="mb-5 text-xl font-semibold tracking-tight">{activeLabel}</h2>
           <ActiveForm />
         </section>
 
