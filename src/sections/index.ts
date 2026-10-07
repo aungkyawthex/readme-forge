@@ -71,8 +71,9 @@ const githubStats: Section = {
     const { showStats, showTopLanguages, showStreak } = profile.githubStats;
     if (!user || (!showStats && !showTopLanguages && !showStreak)) return "";
     const name = markdownText(user);
-    const images = [showStats && `<img src="${GITHUB_README_STATS_BASE}/api?username=${encodeURIComponent(user)}&show_icons=true" alt="${name}'s GitHub stats" />`, showTopLanguages && `<img src="${GITHUB_README_STATS_BASE}/api/top-langs/?username=${encodeURIComponent(user)}&layout=compact" alt="${name}'s top languages" />`, showStreak && `<img src="${GITHUB_STREAK_STATS_BASE}/?user=${encodeURIComponent(user)}" alt="${name}'s streak" />`].filter(Boolean);
-    return `## GitHub Stats\n\n<p>\n  ${images.join("\n  ")}\n</p>`;
+    const images = [showStats && `<img src="${GITHUB_README_STATS_BASE}/api?username=${encodeURIComponent(user)}&show_icons=true" alt="${name}'s GitHub stats" />`, showTopLanguages && `<img src="${GITHUB_README_STATS_BASE}/api/top-langs/?username=${encodeURIComponent(user)}&layout=compact" alt="${name}'s top languages" />`, showStreak && `<img src="${GITHUB_STREAK_STATS_BASE}/?user=${encodeURIComponent(user)}" alt="${name}'s streak" />`].filter((image): image is string => Boolean(image));
+    // Separate blocks prevent GitHub from placing cards side-by-side on wide profiles.
+    return `## GitHub Stats\n\n${images.map((image) => `<p>\n  ${image}\n</p>`).join("\n")}`;
   },
 };
 
