@@ -49,13 +49,18 @@ const projects: Section = {
   label: "Projects",
   render: ({ projects }) => {
     if (!projects.length) return "";
-    const items = projects.map((p) => {
-      const links = [
-        p.repoUrl && `[Repo](${p.repoUrl})`,
-        p.liveUrl && `[Live](${p.liveUrl})`,
-      ].filter(Boolean).join(" · ");
-      return `- **${p.title}**: ${p.description}${links ? ` (${links})` : ""}`;
-    });
+    const items = projects
+      .filter((p) => p.title.trim())
+      .map((p) => {
+        const links = [
+          p.repoUrl && `[Repo](${p.repoUrl})`,
+          p.liveUrl && `[Live](${p.liveUrl})`,
+        ]
+          .filter(Boolean)
+          .join(" · ");
+        return `- **${p.title}**: ${p.description}${links ? ` (${links})` : ""}`;
+      });
+    if (!items.length) return "";
     return `## 🚀 Projects\n\n${items.join("\n")}`;
   },
 };

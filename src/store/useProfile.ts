@@ -8,6 +8,27 @@ type ProfileState = {
   reset: () => void;
 };
 
+type PersistedSlice = { profile?: Partial<Profile> };
+
+function mergeProfile(saved?: Partial<Profile>): Profile {
+  const projects = (saved?.projects ?? []).map((p) => ({
+    id: p.id || crypto.randomUUID(),
+    title: p.title ?? "",
+    description: p.description ?? "",
+    repoUrl: p.repoUrl ?? "",
+    liveUrl: p.liveUrl ?? "",
+  }));
+
+  return {
+    ...emptyProfile,
+    ...saved,
+    header: { ...emptyProfile.header, ...saved?.header },
+    about: { ...emptyProfile.about, ...saved?.about },
+    skills: saved?.skills ?? emptyProfile.skills,
+    projects,
+  };
+}
+
 export const useProfile = create<ProfileState>()(
   persist(
     (set) => ({
@@ -16,6 +37,16 @@ export const useProfile = create<ProfileState>()(
         set((state) => ({ profile: { ...state.profile, [key]: value } })),
       reset: () => set({ profile: emptyProfile }),
     }),
-    { name: "readme-forge-profile" } // localStorage key
+    {
+      name: "readme-forge-profile",
+      // Old localStorage may lack new fields (e.g. project id). Fill from emptyProfile.
+      merge: (persisted, current) => {
+        const saved = persisted as PersistedSlice | undefined;
+        return {
+          ...current,
+          profile: mergeProfile(saved?.profile),
+        };
+      },
+    }
   )
 );

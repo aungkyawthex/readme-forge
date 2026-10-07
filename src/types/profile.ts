@@ -16,6 +16,7 @@ export const profileSchema = z.object({
   skills: z.array(z.string()),
   projects: z.array(
     z.object({
+      id: z.string(),
       title: z.string(),
       description: z.string(),
       repoUrl: z.string(),
