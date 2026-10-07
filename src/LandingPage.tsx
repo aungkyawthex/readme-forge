@@ -22,7 +22,7 @@ export function LandingPage() {
           <h1>Turn the blank README into a proper introduction.</h1>
           <p className="landing-lede">A private, browser-based workshop for building the README in your <code>username/username</code> repository.</p>
           <Link className="landing-cta" to="/editor">Start building <span aria-hidden="true">→</span></Link>
-          <p className="landing-note">No sign-in. No server. Just your README.</p>
+          <p className="landing-note">No sign-up. Just your README.</p>
         </div>
 
         <div className="blueprint-card" aria-label="Example generated README">
@@ -44,8 +44,13 @@ export function LandingPage() {
         </div>
       </section>
 
-      <footer className="mx-auto max-w-6xl border-t border-[var(--landing-line)] py-6 text-sm text-[var(--landing-muted)]">
-        Built for the repository that shares your GitHub username.
+      <footer className="landing-footer mx-auto max-w-6xl border-t border-[var(--landing-line)] py-6 text-sm text-[var(--landing-muted)]">
+        <span>Built for the repository that shares your GitHub username.</span>
+        <span className="landing-developer">
+          Developer: <a href="https://github.com/aungkyawthex" target="_blank" rel="noreferrer">aungkyawthex</a>
+          <span aria-hidden="true">·</span>
+          <a href="https://aungkyawth3t-portfolio.vercel.app/" target="_blank" rel="noreferrer">Portfolio</a>
+        </span>
       </footer>
     </main>
   );

@@ -113,6 +113,10 @@
 .landing-cta:hover { background: #0e535b; }
 .landing-note { margin-top: .8rem; color: var(--landing-muted); font-size: .75rem; }
 .landing-shell :is(a, button):focus-visible { outline: 3px solid #df993a; outline-offset: 3px; }
+.landing-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .8rem 1.5rem; }
+.landing-developer { display: inline-flex; flex-wrap: wrap; gap: .45rem; }
+.landing-developer a { color: var(--landing-accent); font-weight: 700; }
+.landing-developer a:hover { text-decoration: underline; }
 
 .blueprint-card { position: relative; overflow: hidden; border: 1px solid #9bb6b8; border-radius: .55rem; box-shadow: .8rem .8rem 0 #c7dddd; background: #fbfdfd; transform: rotate(1.5deg); }
 .blueprint-bar { display: flex; align-items: center; gap: .35rem; padding: .75rem .9rem; border-bottom: 1px solid #d9e6e6; }
@@ -124,6 +128,11 @@
 .blueprint-card b { color: #253a40; }
 .blueprint-card span { color: #b35c45; }
 .blueprint-stamp { position: absolute; right: 1rem; bottom: 1rem; border: 1px solid #80a9a3; border-radius: 50%; padding: .55rem .35rem; color: #38746c; font: 700 .56rem/.9 ui-monospace, monospace; letter-spacing: .05em; text-align: center; text-transform: uppercase; transform: rotate(-12deg); }
+
+@media (min-width: 1024px) {
+  /* The card starts alongside the headline, rather than centering against all hero copy. */
+  .blueprint-card { align-self: start; margin-top: 1rem; }
+}
 
 @media (max-width: 640px) {
   .landing-hero h1 { font-size: clamp(2.8rem, 15vw, 4rem); }
